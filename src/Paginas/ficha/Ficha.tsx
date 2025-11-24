@@ -52,6 +52,18 @@
     }
 
 
+    function AumentarNumero(id: string) {
+          setModulos((prev) =>
+            prev.map((mod) => 
+            mod.id === id
+          ? {...mod, numero: mod.numero+1}
+          :mod
+        )
+            
+          )
+    }
+
+
 
 
     
@@ -64,9 +76,10 @@
           <div className='conteiner'>
           {modulos.map((modulo) => (
             <div className='modulo' key={modulo.id}>
-              <p>{modulo.id}</p>
+              <p>{modulo.numero}</p>
               <p>{modulo.conteudo}</p>
               <button onClick={() => AtualizarConteudo(modulo.id)}>atualizar conteudo</button>
+              <button onClick={() => AumentarNumero(modulo.id)}>Aumentar numero</button>
             </div>
             
           ))}
