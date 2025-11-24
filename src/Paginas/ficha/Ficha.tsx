@@ -6,6 +6,7 @@
   type Modulo = {
     id: string;
     conteudo: string;
+    numero: number;
   };
 
   interface RepetidorModulos {
@@ -17,34 +18,60 @@
 
 
 
+
+
   function Ficha() {
-    const [nomeModulo, setnomeModulo] = useState('')
     const [conteudoModulo, setConteudoModulo] = useState('')
 
     const [modulos, setModulos] = useState<Modulo[]>([
-      {id: "1", conteudo: ""},
-      {id: "2", conteudo: ""}
+
     ])
+
+
+
+    function AdicionarModulo() {
+      const novoId = (modulos.length +1).toString()
+
+        setModulos((prev) => [
+          ...prev,
+          {id: novoId, conteudo: "", numero: 0}
+        ]);
+
+    };
+
+
+    function AtualizarConteudo(id: string) {
+          setModulos((prev) =>
+            prev.map((mod) => 
+            mod.id === id
+          ? {...mod, conteudo: conteudoModulo}
+          :mod
+        )
+            
+          )
+    }
+
+
+
+
     
     return (
         <div>
-
-          <input type="text" value={nomeModulo} onChange={e => setnomeModulo(e.target.value)}/>
+          <button onClick={AdicionarModulo}>Adicionar Modulo</button>
           <p>conteudo:</p>
           <input type="text" value={conteudoModulo} onChange={e => setConteudoModulo(e.target.value)}/>
 
           <div className='conteiner'>
           {modulos.map((modulo) => (
-            <div className='id' key={modulo.id}>
+            <div className='modulo' key={modulo.id}>
               <p>{modulo.id}</p>
               <p>{modulo.conteudo}</p>
-              <button>atualizar conteudo</button>
-
-              
+              <button onClick={() => AtualizarConteudo(modulo.id)}>atualizar conteudo</button>
             </div>
             
           ))}
         </div>
+      </div>
 
     )
   }
