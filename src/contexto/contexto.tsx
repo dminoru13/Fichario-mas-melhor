@@ -25,14 +25,23 @@ type ModulosContextType = {
         {id: '1', ModuloFilho: []}]
     )
 
-    function adicionarModulo(id, novoModulo) {
-        setModulos((prev) =>
-            prev.map((item) => 
-            item.id === id
-                ? {... item, ModuloFilho: [...item.ModuloFilho, novoModulo] }
-                : item
-            )
-        );
+    function adicionarModulo(id: string, novoModulo: TipoModulo) {
+
+        if (id.split(".").length === 1)
+            {
+                setModulos((prev) =>
+                prev.map((item) => 
+
+                        item.id === id
+                            ? {... item, ModuloFilho: [...item.ModuloFilho, novoModulo] }
+                            : item
+                    )   
+                );
+            }
+        
+        
+        //Eu to tentando fazer dar pra adicionar um modulo dentro de um mopdulo dentro de um modulo, atualmente ele só agunta 1 nivel de filho
+        
 
         
     }

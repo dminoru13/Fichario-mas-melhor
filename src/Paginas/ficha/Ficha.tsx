@@ -2,13 +2,11 @@
   import './Ficha.css'
   import Modulo from '../modulo/Modulo';
   import type {TipoModulo} from "../../contexto/contexto"
+  import { useModulo } from '../../contexto/contexto'
 
 
   function Ficha() {
-
-     const [modulos, setModulos] = useState<TipoModulo[]>([
-          {id: '1', ModuloFilho: []}]
-        )
+      const { modulos, adicionarModulo } = useModulo();
 
     return (
        <div className='conteiner'>
