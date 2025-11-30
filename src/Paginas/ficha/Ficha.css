@@ -2,6 +2,17 @@
     border: 2px red solid;
     background-color: rgb(241, 224, 224);
     margin: 5px;
-    width: 90%;
+    width: 40%;
     min-height: 3vw;
+}
+
+.cabecario{
+    display: flex;
+    flex-direction: row;
+}
+
+.botaoAdd{
+   margin-left: auto;
+   width: 2.5vw;
+   height: 2.5vw;
 }

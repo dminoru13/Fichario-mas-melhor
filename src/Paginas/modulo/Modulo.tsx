@@ -1,19 +1,24 @@
     import { useState } from 'react'
-    import type {TipoModulo, RepetidorModulos} from "../ficha/Ficha"
+    import type {TipoModulo} from "../../contexto/contexto"
   
   
-  function Modulo({ id, conteudo, numero, ModuloFilho}: TipoModulo) {
+  function Modulo({ id, ModuloFilho}: TipoModulo) {
 
     return(
       <div className='modulo'>
-        <p>
-          {id}
-        </p>
-        
-        {ModuloFilho.map((Carlos) =>
-          <Modulo id = {Carlos.id} conteudo = {Carlos.conteudo} numero = {Carlos.numero} ModuloFilho = {Carlos.ModuloFilho} />
-        )}
+        <div className='cabecario'>
+                <p>
+                  {id}
+                </p>
 
+              <button className='botaoAdd'> + </button>
+        </div>
+
+        <div className='filhos'>
+          {ModuloFilho.map((Carlos) =>
+          <Modulo id = {Carlos.id} ModuloFilho = {Carlos.ModuloFilho} />
+        )}
+        </div>
       </div>
     )
 
