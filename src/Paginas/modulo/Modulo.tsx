@@ -9,7 +9,7 @@
   
   function Modulo({ id, tipo }: { id: string, tipo: string }) {
 
-      const { modulos, adicionarModulo } = useModulo();
+      const { modulos, adicionarModulo, apagarModulo, moverModulo, idAlvo } = useModulo();
 
       function encontrar(id: string, lista: TipoModulo[]): TipoModulo | null {
         for (const item of lista) {
@@ -29,15 +29,18 @@
       }
 
 
+
       if(tipo === "divisoria")
       {
-          return (
+        return (
         <div className="modulo">
           <div className="cabecario">
             <p>{id}</p>
             <div className="divBtn">
               <button onClick={() => adicionarFilho("divisoria")} className='btnAdd'>+</button>
               <button onClick={() => adicionarFilho("TXT")} className='btnAdd'>TXT</button>
+              <button onClick={() => apagarModulo(id)} className='btnAdd'>X</button>
+              <button onClick={() => moverModulo(id, idAlvo)} className='btnAdd'>{"=>"}</button>
            
             </div>
             
