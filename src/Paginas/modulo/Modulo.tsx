@@ -1,4 +1,3 @@
-    import { useState } from 'react'
     import type {TipoModulo} from "../../contexto/contexto"
     import { useModulo } from '../../contexto/contexto'
 
@@ -22,10 +21,10 @@ function Modulo({ id }: { id: string }) {
   }
 
   const moduloAtual = encontrar(id, modulos);
-  if (!moduloAtual) return null; // não renderiza nada se sumiu
+  if (!moduloAtual) return null;
 
   function adicionarFilho() {
-    const numero = moduloAtual.ModuloFilho.length + 1;
+    const numero = moduloAtual!.ModuloFilho.length + 1;
     adicionarModulo(id, { id: id + "." + numero, ModuloFilho: [] });
   }
 
@@ -33,7 +32,7 @@ function Modulo({ id }: { id: string }) {
     <div className="modulo">
       <div className="cabecario">
         <p>{id}</p>
-        <button onClick={adicionarFilho}>+</button>
+        <button onClick={adicionarFilho} className='btnAdd'>+</button>
       </div>
 
       <div className="filhos">

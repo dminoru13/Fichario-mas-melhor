@@ -1,9 +1,16 @@
+:root {
+    background-color: black;
+}
+
+
 .modulo{
     border: 2px red solid;
-    background-color: rgb(241, 224, 224);
+    background-color: rgb(24, 24, 24);
     margin: 5px;
-    width: 40%;
+    width: 97%;
     min-height: 3vw;
+    margin: 1vw;
+    color: white;
 }
 
 .cabecario{
@@ -11,8 +18,10 @@
     flex-direction: row;
 }
 
-.botaoAdd{
+.btnAdd{
    margin-left: auto;
    width: 2.5vw;
    height: 2.5vw;
+   background-color: rgb(32, 32, 32);
+   color: white;
 }

@@ -20,7 +20,7 @@ type ModulosContextType = {
   const ContextoModulos = createContext<ModulosContextType | null>(null)
 
 
-  export function ProvedorModulos({children}) {
+  export function ProvedorModulos({children}: {children: React.ReactNode }) {
     const [modulos, setModulos] = useState<TipoModulo[]>([
         {id: '1', ModuloFilho: []}]
     )
