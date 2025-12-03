@@ -11,11 +11,15 @@
 
 type ModulosContextType = {
   modulos: TipoModulo[];
-  idAlvo: string;
-  setIdAlvo: (v: string) => void;
   adicionarModulo: (id: string, novoModulo: TipoModulo) => void;
   apagarModulo: (idAlvo: string) => void;
   moverModulo: (idOrigem: string, idDestino: string) => void;
+  idAtual: string;
+  setIdAtual: (v:string) => void;
+  idAlvo: string;
+  setIdAlvo: (v: string) => void;
+  menu: string;
+  setMenu: (v:string) => void;
 };
 
 
@@ -32,6 +36,10 @@ type ModulosContextType = {
     )
 
     const [idAlvo, setidAlvo] = useState("")
+
+    const [idAtual, setIdAtual] = useState("") 
+
+    const [ menu, setMenu] = useState("")
 
 
 
@@ -112,131 +120,129 @@ type ModulosContextType = {
         setModulos(m => reorganizar(remover(m, partes)));
     }
 
+    function moverModulo(idOrigem: string, idDestino: string) {
+      if (!idOrigem || !idDestino) return;
 
+      // Impedir mover para dentro de si mesmo
+      if (idDestino.startsWith(idOrigem + ".")) return;
 
-  function moverModulo(idOrigem: string, idDestino: string) {
-  if (!idOrigem || !idDestino) return;
+      let moduloMovido: TipoModulo | null = null;
 
-  // Impedir mover para dentro de si mesmo
-  if (idDestino.startsWith(idOrigem + ".")) return;
-
-  let moduloMovido: TipoModulo | null = null;
-
-  function remover(lista: TipoModulo[], partes: string[]): TipoModulo[] {
-    return lista
-      .map(item => {
-        const final = item.id.split(".").pop();
-        if (final === partes[0]) {
-          if (partes.length === 1) {
-            moduloMovido = item;
-            return null;
-          }
-          return {
-            ...item,
-            ModuloFilho: remover(item.ModuloFilho, partes.slice(1))
-          };
-        }
-        return item;
-      })
-      .filter(Boolean) as TipoModulo[];
-  }
-
-  // Inserção: mesmo nível OU inserir como primeiro filho caso o filho não exista
-  function inserir(lista: TipoModulo[], partes: string[]): TipoModulo[] {
-    const final = partes[0];
-    const indice = lista.findIndex(m => m.id.split(".").pop() === final);
-
-    // Caso esteja em nível raiz e não exista → adicionar no fim
-    if (partes.length === 1 && indice === -1) {
-      const novaLista = [...lista, moduloMovido!];
-      return novaLista;
-    }
-
-    // Se existe neste nível
-    if (indicesIgual(lista, partes[0])) {
-      if (partes.length === 1) {
-        // inserir antes do item alvo
-        const nova = [...lista];
-        const idx = nova.findIndex(m => m.id.split(".").pop() === final);
-        nova.splice(idx, 0, moduloMovido!);
-        return nova;
+      function remover(lista: TipoModulo[], partes: string[]): TipoModulo[] {
+        return lista
+          .map(item => {
+            const final = item.id.split(".").pop();
+            if (final === partes[0]) {
+              if (partes.length === 1) {
+                moduloMovido = item;
+                return null;
+              }
+              return {
+                ...item,
+                ModuloFilho: remover(item.ModuloFilho, partes.slice(1))
+              };
+            }
+            return item;
+          })
+          .filter(Boolean) as TipoModulo[];
       }
-    }
 
-    // Se o pai existe, mas o filho não → virar primeiro filho
-    if (indice !== -1 && partes.length > 1) {
-      return lista.map(item => {
-        const num = item.id.split(".").pop();
-        if (num === final) {
-          const next = partes.slice(1);
+      // Inserção: mesmo nível OU inserir como primeiro filho caso o filho não exista
+      function inserir(lista: TipoModulo[], partes: string[]): TipoModulo[] {
+        const final = partes[0];
+        const indice = lista.findIndex(m => m.id.split(".").pop() === final);
 
-          // Se o filho não existe → inserir como .1
-          const filhoExiste = item.ModuloFilho.some(
-            m => m.id.split(".").pop() === next[0]
-          );
+        // Caso esteja em nível raiz e não exista → adicionar no fim
+        if (partes.length === 1 && indice === -1) {
+          const novaLista = [...lista, moduloMovido!];
+          return novaLista;
+        }
 
-          if (!filhoExiste) {
+        // Se existe neste nível
+        if (indicesIgual(lista, partes[0])) {
+          if (partes.length === 1) {
+            // inserir antes do item alvo
+            const nova = [...lista];
+            const idx = nova.findIndex(m => m.id.split(".").pop() === final);
+            nova.splice(idx, 0, moduloMovido!);
+            return nova;
+          }
+        }
+
+        // Se o pai existe, mas o filho não → virar primeiro filho
+        if (indice !== -1 && partes.length > 1) {
+          return lista.map(item => {
+            const num = item.id.split(".").pop();
+            if (num === final) {
+              const next = partes.slice(1);
+
+              // Se o filho não existe → inserir como .1
+              const filhoExiste = item.ModuloFilho.some(
+                m => m.id.split(".").pop() === next[0]
+              );
+
+              if (!filhoExiste) {
+                return {
+                  ...item,
+                  ModuloFilho: [moduloMovido!, ...item.ModuloFilho]
+                };
+              }
+
+              return {
+                ...item,
+                ModuloFilho: inserir(item.ModuloFilho, next)
+              };
+            }
+            return item;
+          });
+        }
+
+        // Nenhum caso bateu → descida normal
+        return lista.map(item => {
+          const num = item.id.split(".").pop();
+          if (num === final) {
             return {
               ...item,
-              ModuloFilho: [moduloMovido!, ...item.ModuloFilho]
+              ModuloFilho: inserir(item.ModuloFilho, partes.slice(1))
             };
           }
+          return item;
+        });
+      }
 
+      function indicesIgual(lista: TipoModulo[], str: string): boolean {
+        return lista.some(item => item.id.split(".").pop() === str);
+      }
+
+      // Reorganiza IDs após tudo
+      function reorganizar(lista: TipoModulo[], prefixo = ""): TipoModulo[] {
+        return lista.map((item, i) => {
+          const id = prefixo ? `${prefixo}.${i + 1}` : `${i + 1}`;
           return {
             ...item,
-            ModuloFilho: inserir(item.ModuloFilho, next)
+            id,
+            ModuloFilho: reorganizar(item.ModuloFilho, id)
           };
-        }
-        return item;
+        });
+      }
+
+      // ---------- fluxo principal ---------------
+      setModulos(modulosAtuais => {
+        const partesOrigem = idOrigem.split(".");
+        const partesDestino = idDestino.split(".");
+
+        // 1) Remover origem
+        const semOrigem = remover(modulosAtuais, partesOrigem);
+
+        if (!moduloMovido) return semOrigem;
+
+        // 2) Inserir no destino (com regras novas)
+        const comMovido = inserir(semOrigem, partesDestino);
+
+        // 3) Reorganizar IDs
+        return reorganizar(comMovido);
       });
     }
-
-    // Nenhum caso bateu → descida normal
-    return lista.map(item => {
-      const num = item.id.split(".").pop();
-      if (num === final) {
-        return {
-          ...item,
-          ModuloFilho: inserir(item.ModuloFilho, partes.slice(1))
-        };
-      }
-      return item;
-    });
-  }
-
-  function indicesIgual(lista: TipoModulo[], str: string): boolean {
-    return lista.some(item => item.id.split(".").pop() === str);
-  }
-
-  // Reorganiza IDs após tudo
-  function reorganizar(lista: TipoModulo[], prefixo = ""): TipoModulo[] {
-    return lista.map((item, i) => {
-      const id = prefixo ? `${prefixo}.${i + 1}` : `${i + 1}`;
-      return {
-        ...item,
-        id,
-        ModuloFilho: reorganizar(item.ModuloFilho, id)
-      };
-    });
-  }
-
-  // ---------- fluxo principal ---------------
-  setModulos(modulosAtuais => {
-    const partesOrigem = idOrigem.split(".");
-    const partesDestino = idDestino.split(".");
-
-    // 1) Remover origem
-    const semOrigem = remover(modulosAtuais, partesOrigem);
-
-    if (!moduloMovido) return semOrigem;
-
-    // 2) Inserir no destino (com regras novas)
-    const comMovido = inserir(semOrigem, partesDestino);
-
-    // 3) Reorganizar IDs
-    return reorganizar(comMovido);
-  });
-}
 
 
 
@@ -244,11 +250,15 @@ type ModulosContextType = {
     return(
         <ContextoModulos.Provider value={{
           modulos,
-          idAlvo,
-          setIdAlvo: setidAlvo,
           adicionarModulo,
           apagarModulo,
-          moverModulo
+          moverModulo,
+          idAtual,
+          setIdAtual,
+          idAlvo,
+          setIdAlvo: setidAlvo,
+          menu,
+          setMenu
         }}>
 
 

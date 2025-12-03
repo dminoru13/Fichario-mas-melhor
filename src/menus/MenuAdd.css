@@ -1,0 +1,91 @@
+/* Fundo escuro transparente */
+.menuAddOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(4px);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+/* Caixa do menu (tema escuro) */
+.menuAddBox {
+  width: 350px;
+  padding: 24px;
+  background: #1c1c1c;        /* fundo escuro */
+  border-radius: 14px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  position: relative;
+}
+
+/* Botão X */
+.btnClose {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+
+  background: #333;
+  color: #fff;
+  border: none;
+  font-size: 1rem;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.btnClose:hover {
+  background: #444;
+}
+
+/* Cabeçalho */
+.menuAddBox .cabecario {
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.menuAddBox .titulo {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #ffffff;      /* texto branco */
+}
+
+/* Botões */
+.menuAddBox .botoes {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.menuAddBox .botoes button {
+  padding: 12px;
+  font-size: 1rem;
+  background: #2a2a2a;    /* fundo escuro */
+  color: #fff;            /* texto branco */
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.menuAddBox .botoes button:hover {
+  background: #3a3a3a;
+}
+
+.menuAddBox .botoes button:active {
+  transform: scale(0.95);
+}

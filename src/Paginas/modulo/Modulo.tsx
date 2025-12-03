@@ -9,7 +9,7 @@
   
   function Modulo({ id, tipo }: { id: string, tipo: string }) {
 
-      const { modulos, adicionarModulo, apagarModulo, moverModulo, idAlvo } = useModulo();
+      const { modulos, apagarModulo, moverModulo, idAlvo, setIdAtual, setMenu } = useModulo();
 
       function encontrar(id: string, lista: TipoModulo[]): TipoModulo | null {
         for (const item of lista) {
@@ -23,10 +23,7 @@
       const moduloAtual = encontrar(id, modulos);
       if (!moduloAtual) return null;
 
-      function adicionarFilho(tipo: string) {
-        const numero = moduloAtual!.ModuloFilho.length + 1;
-        adicionarModulo(id, { id: id + "." + numero, ModuloFilho: [], tipo: tipo });
-      }
+      
 
 
 
@@ -37,10 +34,9 @@
           <div className="cabecario">
             <p>{id}</p>
             <div className="divBtn">
-              <button onClick={() => adicionarFilho("divisoria")} className='btnAdd'>+</button>
-              <button onClick={() => adicionarFilho("TXT")} className='btnAdd'>TXT</button>
               <button onClick={() => apagarModulo(id)} className='btnAdd'>X</button>
               <button onClick={() => moverModulo(id, idAlvo)} className='btnAdd'>{"=>"}</button>
+              <button onClick={() => {setIdAtual(id); setMenu("menuAdd")}} className='btnAdd'> +</button>
            
             </div>
             
@@ -58,7 +54,13 @@
       else{
         return(
           <div className="modulo">
-            aaaaaaaaa
+            <div className="cabecario">
+              <div className="divBtn">
+              <button onClick={() => apagarModulo(id)} className='btnAdd'>X</button>
+              <button onClick={() => moverModulo(id, idAlvo)} className='btnAdd'>{"=>"}</button>
+            </div>
+            </div>
+            <input type="text" />
           </div>
         )
       }
