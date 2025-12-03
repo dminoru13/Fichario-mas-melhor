@@ -39,7 +39,9 @@ type ModulosContextType = {
         let deuCerto = false
 
         const ArrayAtualizada = ArrayModulo.map(carlos => {
-          if (carlos.id === CaminhoPartes[0]) {
+          const apenasNumeroFinal = carlos.id.split(".").pop();
+           if (apenasNumeroFinal === CaminhoPartes[0])
+            {
             if (CaminhoPartes.length === 1) {
               deuCerto = true;
               return {...carlos, ModuloFilho: [...carlos.ModuloFilho, novoModulo]}
@@ -61,7 +63,7 @@ type ModulosContextType = {
       setModulos(anterior => {
         const {ArrayAtualizada, deuCerto} = AdicionarModuloFilho(anterior, Caminho)
          if(!deuCerto){
-          console.warn('adicionarModulo: id "${id}" não encontrado - nenhum modulo adicionado');
+          console.warn(`adicionarModulo: id "${idPai}" não encontrado - nenhum modulo adicionado`);
           return anterior;
          }
         return ArrayAtualizada;

@@ -8,37 +8,43 @@
 
   
   
-  function Modulo({ id, ModuloFilho}: TipoModulo) {
-    
-    const { modulos, adicionarModulo } = useModulo();
+function Modulo({ id }: { id: string }) {
 
-    function adicionarFilho() {
-        adicionarModulo(id, {id: id + "." + (ModuloFilho.length+1), ModuloFilho: []})
-        console.log(modulos)
+  const { modulos, adicionarModulo } = useModulo();
+
+  function encontrar(id: string, lista: TipoModulo[]): TipoModulo | null {
+    for (const item of lista) {
+      if (item.id === id) return item;
+      const f = encontrar(id, item.ModuloFilho);
+      if (f) return f;
     }
-
-
-    return(
-      <div className='modulo'>
-        <div className='cabecario'>
-                <p>
-                  {id}
-                </p>
-
-              <button className='botaoAdd' onClick={adicionarFilho}> + </button>
-        </div>
-
-        <div className='filhos'>
-          {ModuloFilho.map((Carlos) =>
-          <Modulo key={Carlos.id} id = {Carlos.id} ModuloFilho = {Carlos.ModuloFilho} />
-        )}
-        </div>
-      </div>
-    )
-
-
-
+    return null;
   }
+
+  const moduloAtual = encontrar(id, modulos);
+  if (!moduloAtual) return null; // não renderiza nada se sumiu
+
+  function adicionarFilho() {
+    const numero = moduloAtual.ModuloFilho.length + 1;
+    adicionarModulo(id, { id: id + "." + numero, ModuloFilho: [] });
+  }
+
+  return (
+    <div className="modulo">
+      <div className="cabecario">
+        <p>{id}</p>
+        <button onClick={adicionarFilho}>+</button>
+      </div>
+
+      <div className="filhos">
+        {moduloAtual.ModuloFilho.map(filho =>
+          <Modulo key={filho.id} id={filho.id} />
+        )}
+      </div>
+    </div>
+  );
+}
+
 
   
   export default Modulo
