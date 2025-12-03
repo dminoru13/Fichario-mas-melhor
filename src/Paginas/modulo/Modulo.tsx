@@ -12,12 +12,8 @@
     
     const { modulos, adicionarModulo } = useModulo();
 
-    function contarId (id:string) {
-      console.log(id.split(".").length)
-    }
-
-    function ListarModulos() {
-        adicionarModulo(id, {id: "1.1", ModuloFilho: []})
+    function adicionarFilho() {
+        adicionarModulo(id, {id: id + "." + (ModuloFilho.length+1), ModuloFilho: []})
         console.log(modulos)
     }
 
@@ -29,14 +25,12 @@
                   {id}
                 </p>
 
-              <button className='botaoAdd' onClick={ListarModulos}> + </button>
-
-              <button className='botaoAdd' onClick={() => contarId(id)}> ListarID </button>
+              <button className='botaoAdd' onClick={adicionarFilho}> + </button>
         </div>
 
         <div className='filhos'>
           {ModuloFilho.map((Carlos) =>
-          <Modulo id = {Carlos.id} ModuloFilho = {Carlos.ModuloFilho} />
+          <Modulo key={Carlos.id} id = {Carlos.id} ModuloFilho = {Carlos.ModuloFilho} />
         )}
         </div>
       </div>

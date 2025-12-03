@@ -25,22 +25,51 @@ type ModulosContextType = {
         {id: '1', ModuloFilho: []}]
     )
 
-    function adicionarModulo(id: string, novoModulo: TipoModulo) {
+    function adicionarModulo(idPai: string, novoModulo: TipoModulo) {
 
-        if (id.split(".").length === 1)
-            {
-                setModulos((prev) =>
-                prev.map((item) => 
+       if (!idPai) {
+        console.warn("idPai vazio — nenhum módulo adicionado");
+        return;
+      }
 
-                        item.id === id
-                            ? {... item, ModuloFilho: [...item.ModuloFilho, novoModulo] }
-                            : item
-                    )   
-                );
+
+      const Caminho = idPai.split(".");
+
+      function AdicionarModuloFilho(ArrayModulo: TipoModulo[], CaminhoPartes: string[]): {ArrayAtualizada: TipoModulo[], deuCerto: boolean} {
+        let deuCerto = false
+
+        const ArrayAtualizada = ArrayModulo.map(carlos => {
+          if (carlos.id === CaminhoPartes[0]) {
+            if (CaminhoPartes.length === 1) {
+              deuCerto = true;
+              return {...carlos, ModuloFilho: [...carlos.ModuloFilho, novoModulo]}
             }
+            else {
+              const { ArrayAtualizada: NovoFilho, deuCerto: FilhoEncontrado } = AdicionarModuloFilho(carlos.ModuloFilho, CaminhoPartes.slice(1));
+
+              if (FilhoEncontrado) deuCerto = true;
+              return {...carlos, ModuloFilho: NovoFilho};
+            }
+          }
+          else {
+            return carlos;
+          }
+        });
+        return {ArrayAtualizada, deuCerto}
+      }
+      
+      setModulos(anterior => {
+        const {ArrayAtualizada, deuCerto} = AdicionarModuloFilho(anterior, Caminho)
+         if(!deuCerto){
+          console.warn('adicionarModulo: id "${id}" não encontrado - nenhum modulo adicionado');
+          return anterior;
+         }
+        return ArrayAtualizada;
+      })
+
+
+      
         
-        
-        //Eu to tentando fazer dar pra adicionar um modulo dentro de um mopdulo dentro de um modulo, atualmente ele só agunta 1 nivel de filho
         
 
         
