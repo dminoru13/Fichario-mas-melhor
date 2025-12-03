@@ -19,9 +19,12 @@
 }
 
 .btnAdd{
-   margin-left: auto;
    width: 2.5vw;
    height: 2.5vw;
    background-color: rgb(32, 32, 32);
    color: white;
+}
+
+.divBtn{
+    margin-left: auto;
 }

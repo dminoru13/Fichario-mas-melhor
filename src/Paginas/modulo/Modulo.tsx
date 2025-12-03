@@ -7,7 +7,7 @@
 
   
   
-  function Modulo({ id }: { id: string }) {
+  function Modulo({ id, tipo }: { id: string, tipo: string }) {
 
       const { modulos, adicionarModulo } = useModulo();
 
@@ -23,25 +23,44 @@
       const moduloAtual = encontrar(id, modulos);
       if (!moduloAtual) return null;
 
-      function adicionarFilho() {
+      function adicionarFilho(tipo: string) {
         const numero = moduloAtual!.ModuloFilho.length + 1;
-        adicionarModulo(id, { id: id + "." + numero, ModuloFilho: [] });
+        adicionarModulo(id, { id: id + "." + numero, ModuloFilho: [], tipo: tipo });
       }
 
-      return (
+
+      if(tipo === "divisoria")
+      {
+          return (
         <div className="modulo">
           <div className="cabecario">
             <p>{id}</p>
-            <button onClick={adicionarFilho} className='btnAdd'>+</button>
+            <div className="divBtn">
+              <button onClick={() => adicionarFilho("divisoria")} className='btnAdd'>+</button>
+              <button onClick={() => adicionarFilho("TXT")} className='btnAdd'>TXT</button>
+           
+            </div>
+            
           </div>
 
           <div className="filhos">
             {moduloAtual.ModuloFilho.map(filho =>
-              <Modulo key={filho.id} id={filho.id} />
+              <Modulo key={filho.id} id={filho.id} tipo = {filho.tipo} />
             )}
           </div>
         </div>
       );
+      }
+
+      else{
+        return(
+          <div className="modulo">
+            aaaaaaaaa
+          </div>
+        )
+      }
+
+      
   }
 
 

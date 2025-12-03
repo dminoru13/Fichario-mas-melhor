@@ -4,6 +4,7 @@
   export type TipoModulo = {
     id: string;
     ModuloFilho: TipoModulo[];
+    tipo: string;
   };
 
 
@@ -22,7 +23,7 @@ type ModulosContextType = {
 
   export function ProvedorModulos({children}: {children: React.ReactNode }) {
     const [modulos, setModulos] = useState<TipoModulo[]>([
-        {id: '1', ModuloFilho: []}]
+        {id: '1', ModuloFilho: [],tipo: "divisoria"}]
     )
 
     function adicionarModulo(idPai: string, novoModulo: TipoModulo) {
